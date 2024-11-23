@@ -1,29 +1,77 @@
 import streamlit as st
+import math
 
-def calculate(num1, num2, operation):
-    if operation == '+':
-        return num1 + num2
-    elif operation == '-':
-        return num1 - num2
-    elif operation == '*':
-        return num1 * num2
-    elif operation == '/':
-        if num2 == 0:
-            return "Error: Division by zero is not allowed."
-        return num1 / num2
-    else:
-        return "Invalid operation"
+# Application Title
+st.title("Scientific Calculator")
 
-# Streamlit App Interface
-st.title("Simple Calculator")
-st.write("Enter two numbers and select an operation to calculate the result.")
+# Input section
+st.header("Input")
+num1 = st.number_input("Enter the first number", value=0.0)
+num2 = st.number_input("Enter the second number (if required)", value=0.0)
 
-# User inputs
-num1 = st.number_input("Enter the first number:", step=1.0)
-num2 = st.number_input("Enter the second number:", step=1.0)
-operation = st.selectbox("Select an operation:", ("+", "-", "*", "/"))
+# Select operation
+st.header("Operations")
+operation = st.selectbox(
+    "Select an operation",
+    [
+        "Addition",
+        "Subtraction",
+        "Multiplication",
+        "Division",
+        "Square Root",
+        "Power",
+        "Logarithm",
+        "Sine",
+        "Cosine",
+        "Tangent"
+    ]
+)
 
-# Calculate and display result when button is clicked
+# Calculate result based on operation
+st.header("Result")
 if st.button("Calculate"):
-    result = calculate(num1, num2, operation)
-    st.write(f"The result of {num1} {operation} {num2} is: {result}")
+    try:
+        if operation == "Addition":
+            result = num1 + num2
+            st.success(f"The result is: {result}")
+        elif operation == "Subtraction":
+            result = num1 - num2
+            st.success(f"The result is: {result}")
+        elif operation == "Multiplication":
+            result = num1 * num2
+            st.success(f"The result is: {result}")
+        elif operation == "Division":
+            if num2 != 0:
+                result = num1 / num2
+                st.success(f"The result is: {result}")
+            else:
+                st.error("Error: Division by zero")
+        elif operation == "Square Root":
+            if num1 >= 0:
+                result = math.sqrt(num1)
+                st.success(f"The result is: {result}")
+            else:
+                st.error("Error: Negative input for square root")
+        elif operation == "Power":
+            result = math.pow(num1, num2)
+            st.success(f"The result is: {result}")
+        elif operation == "Logarithm":
+            if num1 > 0:
+                result = math.log(num1, num2 if num2 > 0 else math.e)
+                st.success(f"The result is: {result}")
+            else:
+                st.error("Error: Logarithm base and argument must be positive")
+        elif operation == "Sine":
+            result = math.sin(math.radians(num1))
+            st.success(f"The result is: {result}")
+        elif operation == "Cosine":
+            result = math.cos(math.radians(num1))
+            st.success(f"The result is: {result}")
+        elif operation == "Tangent":
+            result = math.tan(math.radians(num1))
+            st.success(f"The result is: {result}")
+        else:
+            st.error("Invalid operation selected")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+
